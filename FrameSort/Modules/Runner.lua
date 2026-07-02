@@ -92,7 +92,9 @@ function M:Init()
         provider:RegisterRequestSortCallback(OnProviderRequiresSort)
     end
 
-    if wow.EventRegistry then
+    -- probe the member, not just the table: a foreign compat shim may define
+    -- a partial EventRegistry
+    if wow.EventRegistry and wow.EventRegistry.RegisterCallback then
         wow.EventRegistry:RegisterCallback(events.EditModeExit, OnEditModeExited)
     end
 

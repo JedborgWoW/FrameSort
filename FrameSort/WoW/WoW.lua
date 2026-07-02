@@ -271,8 +271,10 @@ wow.CreateFrame = function(frameType, name, parent, template, id)
         nextFrameId = nextFrameId + 1
     end
 
-    -- wotlk private doesn't have this
-    if template == "BackdropTemplate" and not BackdropTemplateMixin then
+    -- wotlk private doesn't have this template; a foreign compat shim may
+    -- define BackdropTemplateMixin even though the XML template doesn't
+    -- exist, so gate on the client build too (SetBackdrop is native there)
+    if template == "BackdropTemplate" and (wow.IsWotlkPrivate() or not BackdropTemplateMixin) then
         template = nil
     end
 

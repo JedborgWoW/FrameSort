@@ -52,6 +52,13 @@ required — it's the addon being sorted).
 - Guarded no-ops for `FontString:SetWordWrap` and
   `Button:SetMotionScriptsWhileDisabled` (used by LibUIDropDownMenu when
   building dropdowns; uncertain on stock 3.3.5a, cosmetic-only).
+- **Login error `Couldn't find inherited node "BackdropTemplate"`** (config
+  panel backgrounds): the facade's own `CreateFrame` wrapper stripped
+  `"BackdropTemplate"` only when `BackdropTemplateMixin` was nil — the same
+  foreign-shim trap as above. Now also stripped on the 3.3.5a client build
+  (the panels call the native `SetBackdrop` directly afterwards).
+- Hardened the `EventRegistry` probe in the runner the same way (member
+  check, not just the namespace).
 
 ### Meta
 - `.toc`: author credit `Verz, Tsoukie (backport: Jedborg)`, notes mention
