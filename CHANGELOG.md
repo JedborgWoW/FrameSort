@@ -39,6 +39,19 @@ required — it's the addon being sorted).
   the passed id.
 - `LargeDropDownMenuButtonMixin` load error (`CreateFromMixins` absent) —
   covered by the Compat shim.
+- **Login error `Couldn't find inherited node "DialogBorderDarkTemplate"`**
+  (which also killed every dropdown: `Create_UIDropDownMenu` nil): the
+  coexisting CompactRaidFrame backport defines `BackdropTemplateMixin` as an
+  empty shim table, and LibUIDropDownMenu used the mixin's *presence* to
+  decide the retail backdrop XML *templates* exist. Template call sites are
+  now additionally gated on the client build (`GetBuildInfo() == "3.3.5"`),
+  and the native-`SetBackdrop` fallback uses the same gate.
+- **Login error `attempt to call field 'GetAddOnEnableState'`**: another
+  backport defines a *partial* `C_AddOns` namespace without that function;
+  the facade now probes the member, not just the namespace.
+- Guarded no-ops for `FontString:SetWordWrap` and
+  `Button:SetMotionScriptsWhileDisabled` (used by LibUIDropDownMenu when
+  building dropdowns; uncertain on stock 3.3.5a, cosmetic-only).
 
 ### Meta
 - `.toc`: author credit `Verz, Tsoukie (backport: Jedborg)`, notes mention

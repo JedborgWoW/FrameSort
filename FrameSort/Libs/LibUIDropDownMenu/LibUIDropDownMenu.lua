@@ -28,6 +28,11 @@ if not lib then return end
 
 -- Determine WoW TOC Version
 local WoWClassicEra, WoWClassicTBC, WoWWOTLKC, WoWRetail
+-- Stock wotlk 3.3.5a private clients share TOC 30300 with wrath-classic, but
+-- the retail backdrop XML templates do NOT exist there — and a coexisting
+-- compat addon may define BackdropTemplateMixin as an empty shim table, so
+-- the mixin's presence can't be used to infer the templates exist.
+local WoWWotlkPrivate = (GetBuildInfo() == "3.3.5")
 local wowversion  = select(4, GetBuildInfo())
 if wowversion < 20000 then
 	WoWClassicEra = true
@@ -335,7 +340,7 @@ local function create_MenuButton(name, parent)
 	
 	-- ColorSwatch
 	local fcw
-	fcw = CreateFrame("Button", name and (name.."ColorSwatch") or nil, f, BackdropTemplateMixin and DropDownMenuButtonMixin and "BackdropTemplate,ColorSwatchTemplate" or BackdropTemplateMixin and "BackdropTemplate" or nil)
+	fcw = CreateFrame("Button", name and (name.."ColorSwatch") or nil, f, (not WoWWotlkPrivate) and (BackdropTemplateMixin and DropDownMenuButtonMixin and "BackdropTemplate,ColorSwatchTemplate" or BackdropTemplateMixin and "BackdropTemplate") or nil)
 	fcw:SetPoint("RIGHT", f, -6, 0)
 	fcw:Hide()
 	if not DropDownMenuButtonMixin then
@@ -504,19 +509,19 @@ local function creatre_DropDownList(name, parent)
 	f:SetFrameStrata("DIALOG")
 	f:EnableMouse(true)
 	
-	local fbd = name and _G[name.."Backdrop"] or CreateFrame("Frame", name and (name.."Backdrop") or nil, f, BackdropTemplateMixin and "DialogBorderDarkTemplate" or nil)
+	local fbd = name and _G[name.."Backdrop"] or CreateFrame("Frame", name and (name.."Backdrop") or nil, f, (not WoWWotlkPrivate) and BackdropTemplateMixin and "DialogBorderDarkTemplate" or nil)
 	fbd:SetAllPoints()
 	fbd.backdropInfo = BACKDROP_DIALOG_DARK
-	if ( not BackdropTemplateMixin and fbd.SetBackdrop ) then
+	if ( WoWWotlkPrivate and fbd.SetBackdrop ) then
 		-- wotlk 3.3.5a: SetBackdrop is native and no template applies backdropInfo
 		fbd:SetBackdrop(BACKDROP_DIALOG_DARK)
 	end
 	f.Backdrop = fbd
 
-	local fmb = name and _G[name.."MenuBackdrop"] or CreateFrame("Frame", name and (name.."MenuBackdrop") or nil, f, TooltipBackdropTemplateMixin and "TooltipBackdropTemplate" or nil)
+	local fmb = name and _G[name.."MenuBackdrop"] or CreateFrame("Frame", name and (name.."MenuBackdrop") or nil, f, (not WoWWotlkPrivate) and TooltipBackdropTemplateMixin and "TooltipBackdropTemplate" or nil)
 	fmb:SetAllPoints()
 	fmb.backdropInfo = BACKDROP_TOOLTIP_16_16_5555
-	if ( not TooltipBackdropTemplateMixin and fmb.SetBackdrop ) then
+	if ( WoWWotlkPrivate and fmb.SetBackdrop ) then
 		-- wotlk 3.3.5a: SetBackdrop is native and no template applies backdropInfo
 		fmb:SetBackdrop(BACKDROP_TOOLTIP_16_16_5555)
 	end

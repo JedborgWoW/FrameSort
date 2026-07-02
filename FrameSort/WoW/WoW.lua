@@ -111,7 +111,9 @@ local wow = {
     -- addon related
     GetAddonInfo = C_AddOns and C_AddOns.GetAddonInfo or GetAddOnInfo,
     GetAddOnEnableState = function(character, name)
-        if C_AddOns then
+        -- check the member, not just the namespace: another addon's compat
+        -- layer may define a PARTIAL C_AddOns without GetAddOnEnableState
+        if C_AddOns and C_AddOns.GetAddOnEnableState then
             -- argument order is reversed
             return C_AddOns.GetAddOnEnableState(name, character)
         end

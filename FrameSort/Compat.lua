@@ -238,6 +238,15 @@ do
             end
         end
 
+        -- safe no-ops if the client lacks them (cosmetic-only behaviour);
+        -- guarded, so a native implementation always wins
+        if not index.SetWordWrap and obj.GetObjectType and obj:GetObjectType() == "FontString" then
+            index.SetWordWrap = function() end
+        end
+        if not index.SetMotionScriptsWhileDisabled and obj.GetObjectType and obj:GetObjectType() == "Button" then
+            index.SetMotionScriptsWhileDisabled = function() end
+        end
+
         if withAdjustPoints and not index.AdjustPointsOffset then
             index.AdjustPointsOffset = function(self, xDelta, yDelta)
                 local points = {}
