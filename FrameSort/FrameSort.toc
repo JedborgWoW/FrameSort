@@ -1,0 +1,12 @@
+## Interface: 30300
+## Title: FrameSort
+## Notes: Places the player frame at the top/middle/bottom (configurable) of party/raid frames. Stock 3.3.5a (no ClassicAPI dependency).
+## Author: Verz, Tsoukie (backport: Jedborg)
+## Version: 1.2
+## SavedVariables: FrameSortDB
+## Dependencies: CompactRaidFrame
+## OptionalDeps: Cell, ElvUI, Grid2, GladiusEx, ShadowedUnitFrames
+
+Compat.lua
+Libs\LibStub\LibStub.lua
+Load-Classic.xml
