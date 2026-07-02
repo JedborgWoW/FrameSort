@@ -190,6 +190,8 @@ function fsConfig:Init()
 
     SLASH_FRAMESORT1 = "/fs"
     SLASH_FRAMESORT2 = "/framesort"
+    -- some 3.3.5a private clients claim /fs for their frame-stack debug tool
+    SLASH_FRAMESORT3 = "/fsort"
 
     wow.SlashCmdList.FRAMESORT = function()
         if wow.Settings then

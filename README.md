@@ -27,7 +27,9 @@ self-contained and runs on a plain 3.3.5a client. It still requires the
 
 ## Commands
 
-`/fs` or `/framesort` opens the options (Interface → AddOns → FrameSort).
+`/framesort`, `/fsort` or `/fs` opens the options (Interface → AddOns →
+FrameSort). Note: some private clients claim `/fs` for their own frame-stack
+debug tool — use `/framesort` or `/fsort` there.
 
 ## Installation
 

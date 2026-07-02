@@ -60,6 +60,10 @@ required — it's the addon being sorted).
 - Hardened the `EventRegistry` probe in the runner the same way (member
   check, not just the namespace).
 
+### Added (later same day)
+- `/fsort` slash alias — some private clients (e.g. Triumvirate) claim `/fs`
+  for their own frame-stack debug tool, so `/fs` may open that instead.
+
 ### Meta
 - `.toc`: author credit `Verz, Tsoukie (backport: Jedborg)`, notes mention
   the stock 3.3.5a target; `Compat.lua` + LibStub load before everything else.
