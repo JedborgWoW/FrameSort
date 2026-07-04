@@ -2,6 +2,17 @@
 
 All notable changes to this **stock 3.3.5a backport** of FrameSort.
 
+## [1.2] — 2026-07-04
+
+### Fixed
+- **Widget-metatable shims now install with `rawset`.** On this client the
+  Frame-type method table carries a `__newindex` guard that silently swallows a
+  plain `index.SetSize = fn` for a NEW key. `Compat.lua`'s `extend()` added
+  `SetSize`/`GetSize`/`SetWordWrap`/`SetMotionScriptsWhileDisabled`/
+  `AdjustPointsOffset` by plain assignment, so on a stock client those were
+  dropped and the methods stayed nil (a latent crash). They now use `rawset`,
+  which bypasses the guard; the `not index.X` checks stay chain-aware.
+
 ## [1.2] — 2026-07-02
 
 Decoupled Tsoukie's ClassicAPI-dependent FrameSort 1.2 so it runs

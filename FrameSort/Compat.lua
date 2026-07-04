@@ -226,29 +226,33 @@ do
         local index = mt and mt.__index
         if type(index) ~= "table" then return end
 
+        -- rawset, not index.X = fn: the frame-type __index table carries a
+        -- __newindex guard that silently drops a plain assignment for a NEW key,
+        -- leaving the method nil. The `not index.X` reads stay chain-aware so a
+        -- native implementation always wins.
         if not index.SetSize then
-            index.SetSize = function(self, w, h)
+            rawset(index, "SetSize", function(self, w, h)
                 self:SetWidth(w)
                 self:SetHeight(h)
-            end
+            end)
         end
         if not index.GetSize then
-            index.GetSize = function(self)
+            rawset(index, "GetSize", function(self)
                 return self:GetWidth(), self:GetHeight()
-            end
+            end)
         end
 
         -- safe no-ops if the client lacks them (cosmetic-only behaviour);
         -- guarded, so a native implementation always wins
         if not index.SetWordWrap and obj.GetObjectType and obj:GetObjectType() == "FontString" then
-            index.SetWordWrap = function() end
+            rawset(index, "SetWordWrap", function() end)
         end
         if not index.SetMotionScriptsWhileDisabled and obj.GetObjectType and obj:GetObjectType() == "Button" then
-            index.SetMotionScriptsWhileDisabled = function() end
+            rawset(index, "SetMotionScriptsWhileDisabled", function() end)
         end
 
         if withAdjustPoints and not index.AdjustPointsOffset then
-            index.AdjustPointsOffset = function(self, xDelta, yDelta)
+            rawset(index, "AdjustPointsOffset", function(self, xDelta, yDelta)
                 local points = {}
                 for i = 1, self:GetNumPoints() do
                     local point, relativeTo, relativePoint, x, y = self:GetPoint(i)
@@ -262,7 +266,7 @@ do
                     local p = points[i]
                     self:SetPoint(p[1], p[2], p[3], p[4], p[5])
                 end
-            end
+            end)
         end
     end
 
