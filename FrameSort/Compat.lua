@@ -214,6 +214,11 @@ end
 --
 --   SetSize/GetSize (Cata)  — used throughout LibUIDropDownMenu and the
 --                             config panels.
+--   SetShown (MoP)          — LibUIDropDownMenu button/arrow visibility and
+--                             the config panels (HealthCheck, Sorting, ...).
+--   SetEnabled (MoP)        — LibUIDropDownMenu expand arrow and
+--                             UIDropDownMenu_SetDropDownEnabled; only on
+--                             types that have Enable/Disable.
 --   AdjustPointsOffset (BfA) — used by the insecure SoftArrange path when
 --                              spacing raid groups (Modules\Sorting\
 --                              SecureNoCombat.lua); the in-combat secure
@@ -239,6 +244,26 @@ do
         if not index.GetSize then
             rawset(index, "GetSize", function(self)
                 return self:GetWidth(), self:GetHeight()
+            end)
+        end
+        if not index.SetShown then
+            rawset(index, "SetShown", function(self, show)
+                if show then
+                    self:Show()
+                else
+                    self:Hide()
+                end
+            end)
+        end
+        -- only meaningful where Enable/Disable exist (Button, CheckButton,
+        -- EditBox, Slider); the chain-aware read keeps native wins
+        if not index.SetEnabled and index.Enable and index.Disable then
+            rawset(index, "SetEnabled", function(self, enabled)
+                if enabled then
+                    self:Enable()
+                else
+                    self:Disable()
+                end
             end)
         end
 
